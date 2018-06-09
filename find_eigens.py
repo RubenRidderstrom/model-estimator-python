@@ -40,18 +40,18 @@ def _estimate_p_sum(COUNT_MATRIX_LIST):
    return matrixSum
 
 #
-# Estimate a residue distribution by counting all residues.
+# Estimate a residue distribution by counting all residues.\
 # Use pseudo counts to avoid zero elements.
 #
 def _residue_distribution(COUNT_MATRIX_LIST):
     MATRIX_SUM = sum(COUNT_MATRIX_LIST)
     
-    LEFT_TERM = MATRIX_SUM * np.ones((20,1))
-    RIGHT_TERM = np.ones((1,20)) * MATRIX_SUM
-    eq = np.transpose(LEFT_TERM) + RIGHT_TERM
+    COLUMN_SUMS = np.sum(MATRIX_SUM,0)
+    ROW_SUMS = np.sum(MATRIX_SUM,1)
     
-    eq += np.ones((1,20))
-    eq /= sum(eq)
+    eq = np.transpose(COLUMN_SUMS) + ROW_SUMS
+    eq += 1
+    eq /= np.sum(eq)
     
     return eq
    
