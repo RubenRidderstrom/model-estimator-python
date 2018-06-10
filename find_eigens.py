@@ -4,44 +4,35 @@ import numpy as np
 
 
 ### Estimate P-sum functions
-    
+
 #
 # Sum all matrices in input list, but divide each matrix by
 # the sum of its elements. This estimates $\Pi * P(t_i)$.
 # Also make sure that the input is symmetric.
 #
 def _get_symmetric_matrix_sum(COUNT_MATRIX_LIST):
-    matrixSum = np.zeros(shape=(20,20))
+    sumMatrix = np.zeros(shape=(20,20))
     
     for matrix in COUNT_MATRIX_LIST:
-        #matrix -= alpha * np.diag(np.diag(matrix))  # Second factor is matrix with non-diagonal elements set to to zero. Alpha is set to zero in octave code
-        matrix = 0.5 * (matrix + np.transpose(matrix))
-        matrixSum += matrix
+        #matrix -= alpha * np.diag(np.diag(matrix))  # Alpha is set to zero in octave code. Second factor is matrix with non-diagonal elements set to to zero
+        sumMatrix += 0.5 * (matrix + np.transpose(matrix))
         
-    return matrixSum
-
-#
-# Ensure that each row in M sums to 1
-#
-def _normalize_rows(matrixSum):
-    rowNorm = np.linalg.norm(matrixSum, axis=1, ord=1)   # Calculate row-wise norm
-    rowNorm = rowNorm.reshape(20,1) # Reshape row vector into column vector. 20 is vector size
-    matrixSum /= rowNorm
-    
-    return matrixSum
+    return sumMatrix
 
 #
 # Using the sum of count matrices, estimate the sum of P matrices
 # 
 def _estimate_p_sum(COUNT_MATRIX_LIST):
-   matrixSum = _get_symmetric_matrix_sum(COUNT_MATRIX_LIST)
-   matrixSum = _normalize_rows(matrixSum)
+   sumMatrix = _get_symmetric_matrix_sum(COUNT_MATRIX_LIST)
+   sumMatrix /= np.sum(sumMatrix, axis=1)   #   Make every row sum to 1
 
-   return matrixSum
+   return sumMatrix
 
 #
-# Estimate a residue distribution by counting all residues.\
+# Estimate a residue distribution by counting all residues.
 # Use pseudo counts to avoid zero elements.
+#
+# Returns column vector
 #
 def _residue_distribution(COUNT_MATRIX_LIST):
     MATRIX_SUM = sum(COUNT_MATRIX_LIST)
