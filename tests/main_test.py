@@ -8,6 +8,8 @@ sys.path.insert(1, os.path.join(sys.path[0], '..'))
 from handle_input_file import handle_input_file
 from match_closest_pair import match_closest_pairs
 from create_count_matrices import create_count_matrices
+from residue_distribution import residue_distribution
+from estimate_p_sum import estimate_p_sum
 
 #	Compares output of calculate_count_matrices on 'testcase1_20seqs.fa' to
 #	an earlier output that is checked to be correct
@@ -32,3 +34,21 @@ def test_output(tmpdir):
 	
 	assert(len(COUNT_MATRIX_LIST) == 10)
 	assert(filecmp.cmp(TEMP_FILE_PATH, COUNT_MATRIX_LIST_PATH))
+	
+	# 	Test EQ against reference EQ
+	CALCULATED_EQ = residue_distribution(COUNT_MATRIX_LIST)
+	EQ_FILE_PATH = tmpdir.join("calculated_eq.npy").strpath
+	np.save(EQ_FILE_PATH, CALCULATED_EQ)
+
+	EQ_REFERENCE_FILE_PATH = os.path.join(TEST_FILES_PATH, 'testcase1_20seqs_eq.npy')
+
+	assert(filecmp.cmp(EQ_FILE_PATH, EQ_REFERENCE_FILE_PATH))
+
+	#	Test pSum against reference pSum
+	CALCULATED_P_SUM = estimate_p_sum(COUNT_MATRIX_LIST)
+	P_SUM_FILE_PATH = tmpdir.join("calculated_p_sum.npy").strpath
+	np.save(P_SUM_FILE_PATH, CALCULATED_P_SUM)
+
+	P_SUM_REFERENCE_PATH = os.path.join(TEST_FILES_PATH, 'testcase1_20seqs_pSum.npy')
+
+	assert(filecmp.cmp(P_SUM_FILE_PATH, P_SUM_REFERENCE_PATH))

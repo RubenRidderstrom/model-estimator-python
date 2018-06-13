@@ -1,4 +1,3 @@
-### Import
 import comp_posterior_JC
 import estimate_q
 import find_eigens
@@ -6,9 +5,10 @@ import matrix_weight
 import numpy as np
 import simple_estimation
 
+#   Kept for reference
 
 ### Interface
-def iterative_estimation(COUNT_MATRIX_LIST, THRESHOLD):
+def _iterative_estimation(COUNT_MATRIX_LIST, THRESHOLD):
     # These are constant throughout the iterations
     VL, VR, EQ = find_eigens(COUNT_MATRIX_LIST)
     
