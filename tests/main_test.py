@@ -35,15 +35,6 @@ def test_output(tmpdir):
 	assert(len(COUNT_MATRIX_LIST) == 10)
 	assert(filecmp.cmp(TEMP_FILE_PATH, COUNT_MATRIX_LIST_PATH))
 	
-	# 	Test EQ against reference EQ
-	CALCULATED_EQ = residue_distribution(COUNT_MATRIX_LIST)
-	EQ_FILE_PATH = tmpdir.join("calculated_eq.npy").strpath
-	np.save(EQ_FILE_PATH, CALCULATED_EQ)
-
-	EQ_REFERENCE_FILE_PATH = os.path.join(TEST_FILES_PATH, 'testcase1_20seqs_eq.npy')
-
-	assert(filecmp.cmp(EQ_FILE_PATH, EQ_REFERENCE_FILE_PATH))
-
 	#	Test pSum against reference pSum
 	CALCULATED_P_SUM = estimate_p_sum(COUNT_MATRIX_LIST)
 	P_SUM_FILE_PATH = tmpdir.join("calculated_p_sum.npy").strpath

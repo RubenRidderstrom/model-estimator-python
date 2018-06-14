@@ -5,7 +5,6 @@ from scipy.linalg import eig
 from handle_input_file import handle_input_file
 from match_closest_pair import match_closest_pairs
 from create_count_matrices import create_count_matrices
-from residue_distribution import residue_distribution
 from estimate_p_sum import estimate_p_sum
 
 ### Preamble
@@ -20,7 +19,6 @@ CLOSEST_PAIRS = match_closest_pairs(SEQUENCE_LIST)
 COUNT_MATRIX_LIST = create_count_matrices(CLOSEST_PAIRS)
 
 #   These are constant throughout the iterations
-EQ = residue_distribution(COUNT_MATRIX_LIST)
 P_SUM = estimate_p_sum(COUNT_MATRIX_LIST)
 eigenValues, rightEigenVectorsVr = eig(P_SUM, left=False, right=True)
 eigenValues = eigenValues.real
@@ -33,7 +31,8 @@ INVERTED_RIGHT_EIGEN_VECTORS_VL = np.linalg.inv(rightEigenVectorsVr)
 #
 zeroEigenVectorsList = [eigenVector for eigenVector in INVERTED_RIGHT_EIGEN_VECTORS_VL if all(eigenVector > 0) or all(eigenVector < 0)]
 assert len(zeroEigenVectorsList) == 1, "To many or to few potential zero eigenvectors"
-zeroEigenVector = zeroEigenVectorsList.pop()
+EQ = zeroEigenVectorsList.pop()
+EQ /= EQ.sum()  # Make elements of EQ sum to 1
 
 # #   Non-functional code
 # THRESHOLD = 0.001
