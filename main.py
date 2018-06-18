@@ -7,6 +7,7 @@ from match_closest_pair import match_closest_pairs
 from create_count_matrices import create_count_matrices
 from comp_posterior_JC import comp_posterior_JC
 from matrix_weight import matrix_weight
+from estimate_q import estimate_q
 
 ### Preamble
 os.system('cls')
@@ -24,23 +25,25 @@ sumMatrix = sum(0.5 * (matrix + matrix.transpose()) for matrix in COUNT_MATRIX_L
 sumMatrix /= sumMatrix.sum(axis=1)       #   Make every row sum to 1
 P_SUM = sumMatrix.transpose()        #   Transpose to match output of previous modelEstimator
 
-eigenValues, rightEigenVectorsVr = eig(P_SUM, left=False, right=True)
+eigenValues, VR = eig(P_SUM, left=False, right=True)
 eigenValues = eigenValues.real
-INVERTED_RIGHT_EIGEN_VECTORS_VL = np.linalg.inv(rightEigenVectorsVr)
+VL = np.linalg.inv(VR)
 
 # #
 # # Find the index of the eigenvector corresponding to Q's zero eigenvalue.
 # # This is recognized as the row (because we will be looking at the 'right'
 # # eigenvectors, not the usual left) with all positive or all negative elements.
 # #
-zeroEigenVectorsList = [eigenVector for eigenVector in INVERTED_RIGHT_EIGEN_VECTORS_VL if all(eigenVector > 0) or all(eigenVector < 0)]
+zeroEigenVectorsList = [eigenVector for eigenVector in VL if all(eigenVector > 0) or all(eigenVector < 0)]
 assert len(zeroEigenVectorsList) == 1, "To many or to few potential zero eigenvectors"
 EQ = zeroEigenVectorsList.pop()
-EQ /= EQ.sum()  # Make elements of EQ sum to 1
+EQ = EQ / EQ.sum()  # Make elements of EQ sum to 1
 
 # # Get a first simple estimate using a Jukes-Cantor model
-distSamples = np.arange(1, 400, 5)
-posterior = comp_posterior_JC(COUNT_MATRIX_LIST, distSamples)   # posterior.shape = (10, 80). Rows are identical to Octave but in different order
+DIST_SAMPLES = np.arange(1, 400, 5)
+posterior = comp_posterior_JC(COUNT_MATRIX_LIST, DIST_SAMPLES)   # posterior.shape = (10, 80). Rows are identical to Octave but in different order
 
 W = posterior.sum(axis=0)
-PW = matrix_weight(COUNT_MATRIX_LIST, posterior, distSamples)   #   Seems identical to octave. Alot of NaN
+PW = matrix_weight(COUNT_MATRIX_LIST, posterior, DIST_SAMPLES)   #   Seems identical to octave. Alot of NaN
+
+Qnew = estimate_q(PW, W, VL, VR, EQ, DIST_SAMPLES)

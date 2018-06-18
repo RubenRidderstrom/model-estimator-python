@@ -10,6 +10,10 @@ def _normalize_rows(matrixSum):
     with np.errstate(divide='ignore', invalid='ignore'):  # Ignore division with NaN errors
         matrixSum /= rowNorm
     
+    #   Unsure why the below version doesnt give correct output
+    # with np.errstate(divide='ignore', invalid='ignore'):  # Ignore division with NaN errors    
+    #     matrixSum = matrixSum / matrixSum.sum(axis=1)
+
     return matrixSum
 
 ### Interface
@@ -26,7 +30,7 @@ def matrix_weight(countMatrixList, posterior, distSamples):
         
         for i, countMatrix in enumerate(countMatrixList):
             P += posterior[i, j] * countMatrix
-         
+        
         PW.append(_normalize_rows(P))
         
     return PW

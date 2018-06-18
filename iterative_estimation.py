@@ -18,7 +18,6 @@ def _iterative_estimation(COUNT_MATRIX_LIST, THRESHOLD):
     PW, W = matrix_weight(COUNT_MATRIX_LIST, posterior, distSamplews)
     
     MAX_DIVERGENCE = 100
-    # Qnew, EQ = estimate_q(PW, W, VL, VR, EQ, MAX_DIVERGENCE)  #   In Octave EQ is also returned but it is unchanged
     Qnew = estimate_q(PW, W, VL, VR, EQ, MAX_DIVERGENCE)
     
     # Use this estimate to as a basis for improvement
