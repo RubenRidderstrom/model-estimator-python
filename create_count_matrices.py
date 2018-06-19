@@ -15,7 +15,7 @@ def _create_count_matrix(sequencePair):
         if a == '-' or b == '-':
             continue
         
-        returnMatrix[ALPHABET_DICTIONARY[a]][ALPHABET_DICTIONARY[b]] = returnMatrix[ALPHABET_DICTIONARY[a]][ALPHABET_DICTIONARY[b]] + 1
+        returnMatrix[ALPHABET_DICTIONARY[b]][ALPHABET_DICTIONARY[a]] = returnMatrix[ALPHABET_DICTIONARY[b]][ALPHABET_DICTIONARY[a]] + 1
         
     return returnMatrix
         
@@ -31,8 +31,5 @@ def _create_count_matrices(sequencePairs):
 ### Interface
 def create_count_matrices(SEQUENCE_PAIRS):
     count_matrix_list = _create_count_matrices(SEQUENCE_PAIRS)
-
-    #   Transpose matrices to match output of previous modelEstimator
-    count_matrix_list = [np.transpose(count_matrix) for count_matrix in count_matrix_list]
     
     return count_matrix_list

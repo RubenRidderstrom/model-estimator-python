@@ -21,7 +21,7 @@ def test_output(tmpdir):
     #   Calculate Q and EQ
     CALCULATED_Q, CALCULATED_EQ = main()
 
-    #   Assert calculated and references are close. Expected to pass
+    #   Assert that calculated and references are close. Expected to pass
     assert(np.allclose(CALCULATED_Q, REFERENCE_Q))
     assert(np.allclose(CALCULATED_EQ, REFERENCE_EQ))
 

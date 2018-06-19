@@ -44,9 +44,9 @@ def _main():
 
     #   Get a first simple estimate of Q using a Jukes-Cantor model
     DIST_SAMPLES = np.arange(1, 400, 5)
-    posterior = comp_posterior_JC(COUNT_MATRIX_LIST, DIST_SAMPLES)   # posterior.shape = (10, 80). Rows are identical to Octave but in different order
-    W = posterior.sum(axis=0)
-    PW = matrix_weight(COUNT_MATRIX_LIST, posterior, DIST_SAMPLES)   #   Seems identical to octave. Alot of NaN
+    POSTERIOR = comp_posterior_JC(COUNT_MATRIX_LIST, DIST_SAMPLES)   # posterior.shape = (10, 80). Rows are identical to Octave but in different order
+    W = POSTERIOR.sum(axis=0)
+    PW = matrix_weight(COUNT_MATRIX_LIST, POSTERIOR, DIST_SAMPLES)   #   Seems identical to octave. Alot of NaN
     Q = estimate_q(PW, W, VL, VR, EQ, DIST_SAMPLES)
 
     #   Set loop variables
