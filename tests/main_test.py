@@ -12,9 +12,6 @@ from create_count_matrices import create_count_matrices
 from comp_posterior_JC import comp_posterior_JC
 from matrix_weight import matrix_weight
 
-#	Compares output of calculate_count_matrices on 'testcase1_20seqs.fa' to
-#	an earlier output that is checked to be correct
-
 def test_output(tmpdir):
 	#	Create paths
 	CURRENT_DIR = os.path.dirname(__file__)
