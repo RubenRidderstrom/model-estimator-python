@@ -57,8 +57,6 @@ def _main():
     MAX_ITERATIONS = 10
     Q = np.zeros(shape=(20,20))
 
-    # Same order of matrices as octave to test code
-    COUNT_MATRIX_LIST[0], COUNT_MATRIX_LIST[9] = COUNT_MATRIX_LIST[9], COUNT_MATRIX_LIST[0]
     THRESHOLD = 0.001
 
     while (condition == False):

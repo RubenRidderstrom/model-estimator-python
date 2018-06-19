@@ -12,18 +12,23 @@ def test_output(tmpdir):
     CURRENT_DIR = os.path.dirname(__file__)
     TEST_FILES_PATH = os.path.join(CURRENT_DIR, 'test_files\\full_test\\')
 
-    #   Create paths to reference files
+    #   Load reference Q and EQ
     REFERENCE_Q_PATH = os.path.join(TEST_FILES_PATH, 'testcase1_20seqs_Q.npy')
+    REFERENCE_Q = np.load(REFERENCE_Q_PATH)
     REFERENCE_EQ_PATH = os.path.join(TEST_FILES_PATH, 'testcase1_20seqs_EQ.npy')
+    REFERENCE_EQ = np.load(REFERENCE_EQ_PATH)
 
     #   Calculate Q and EQ
     CALCULATED_Q, CALCULATED_EQ = main()
 
-    #   Save and create paths to calculated Q and EQ
-    CALCULATED_Q_PATH = tmpdir.join("CALCULATED_Q.npy").strpath
-    np.save(CALCULATED_Q_PATH, CALCULATED_Q)
-    CALCULATED_EQ_PATH = tmpdir.join("CALCULATED_EQ.npy").strpath
-    np.save(CALCULATED_EQ_PATH, CALCULATED_EQ)
+    #   Assert calculated and references are close. Expected to pass
+    assert(np.allclose(CALCULATED_Q, REFERENCE_Q))
+    assert(np.allclose(CALCULATED_EQ, REFERENCE_EQ))
 
-    assert(filecmp.cmp(CALCULATED_Q_PATH, REFERENCE_Q_PATH))
-    assert(filecmp.cmp(CALCULATED_EQ_PATH, REFERENCE_EQ_PATH))
+    #   Assert calculated and reference are element wise equal. Expected to fail.
+    #   Only here to quickly be able to eyeball how big difference is
+    for i,_ in np.ndenumerate(CALCULATED_Q):
+        assert(CALCULATED_Q[i] == REFERENCE_Q[i])
+
+    for i,_ in np.ndenumerate(CALCULATED_EQ):
+        assert(CALCULATED_EQ[i] == REFERENCE_EQ[i])
