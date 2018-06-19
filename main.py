@@ -42,35 +42,25 @@ def _main():
     EQ = zeroEigenVectorsList.pop()
     EQ = EQ / EQ.sum()  # Make elements of EQ sum to 1
 
-    # # Get a first simple estimate using a Jukes-Cantor model
+    #   Get a first simple estimate of Q using a Jukes-Cantor model
     DIST_SAMPLES = np.arange(1, 400, 5)
     posterior = comp_posterior_JC(COUNT_MATRIX_LIST, DIST_SAMPLES)   # posterior.shape = (10, 80). Rows are identical to Octave but in different order
     W = posterior.sum(axis=0)
     PW = matrix_weight(COUNT_MATRIX_LIST, posterior, DIST_SAMPLES)   #   Seems identical to octave. Alot of NaN
+    Q = estimate_q(PW, W, VL, VR, EQ, DIST_SAMPLES)
 
-    Qnew = estimate_q(PW, W, VL, VR, EQ, DIST_SAMPLES)
-
-    # Use this estimate to as a basis for improvement
-    condition = False
+    #   Set loop variables
+    difference = float("inf")
     iteration = 0
-    dv = []
-    MAX_ITERATIONS = 10
-    Q = np.zeros(shape=(20,20))
-
     THRESHOLD = 0.001
+    MAX_ITERATIONS = 10
 
-    while (condition == False):
+    #   Calculate Q
+    while (iteration < MAX_ITERATIONS and difference > THRESHOLD):
         iteration += 1
-        Q = Qnew
-        Qnew, difference = simple_estimation(COUNT_MATRIX_LIST, Q, VL, VR, EQ, DIST_SAMPLES)
-        dv.append(difference)
-        
-        condition = (iteration >= MAX_ITERATIONS or difference < THRESHOLD)    
-
-    Q = Qnew
+        Q, difference = simple_estimation(COUNT_MATRIX_LIST, Q, VL, VR, EQ, DIST_SAMPLES)
 
     return Q, EQ
-
 
 ### Interface
 def main():
