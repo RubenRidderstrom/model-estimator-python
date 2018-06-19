@@ -25,8 +25,7 @@ def _main():
 
     #   These are constant throughout the iterations
     sumMatrix = sum(0.5 * (matrix + matrix.transpose()) for matrix in COUNT_MATRIX_LIST)
-    sumMatrix /= sumMatrix.sum(axis=1)       #   Make every row sum to 1
-    P_SUM = sumMatrix.transpose()        #   Transpose to match output of previous modelEstimator
+    P_SUM = sumMatrix / sumMatrix.sum(axis=1, keepdims=True)    # Make every row sum to 1
 
     eigenValues, VR = eig(P_SUM, left=False, right=True)
     eigenValues = eigenValues.real
