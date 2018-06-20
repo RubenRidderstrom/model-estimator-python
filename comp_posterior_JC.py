@@ -1,13 +1,13 @@
 import numpy as np
 from scipy.stats import binom
 
-###   Private functions
-def _jc_posterior_ng(countMatrix, distSamples):
-    matrixSum = countMatrix.sum()
-    diagonalSum = countMatrix.diagonal().sum()
-    p = np.exp(- distSamples / 100)
+### Private functions
+def _jc_posterior_ng(COUNT_MATRIX, DIST_SAMPLES):
+    MATRIX_SUM = COUNT_MATRIX.sum()
+    MATRIX_DIAGONAL_SUM = COUNT_MATRIX.diagonal().sum()
+    P = np.exp(- DIST_SAMPLES / 100)
     
-    likelihood = binom.pmf(diagonalSum, matrixSum, p)
+    likelihood = binom.pmf(MATRIX_DIAGONAL_SUM, MATRIX_SUM, P)
 
 #   This code is not commented in Octave
 #    if (any(isnan(likelihood)))
@@ -18,9 +18,9 @@ def _jc_posterior_ng(countMatrix, distSamples):
     likelihood[0] /= 2
     likelihood[-1] /= 2
     
-    posterior_vec = likelihood / ( likelihood.sum() * (distSamples[1] - distSamples[0]) )
+    POSTERIOR_VEC = likelihood / ( likelihood.sum() * (DIST_SAMPLES[1] - DIST_SAMPLES[0]) )
 
-    return posterior_vec    
+    return POSTERIOR_VEC    
     
 ### Interface
 
@@ -30,15 +30,11 @@ def _jc_posterior_ng(countMatrix, distSamples):
 # Similar to previous comp_posterior, but not re-computing matrix
 # exponentials all the time. 
 #
-def comp_posterior_JC(countMatrixList, distSamples):
-    numberOfCountMatrices = len(countMatrixList)
-    PD = np.zeros((numberOfCountMatrices, len(distSamples)))
+def comp_posterior_JC(COUNT_MATRIX_LIST, DIST_SAMPLES):
+    NUMBER_OF_COUNT_MATRICES = len(COUNT_MATRIX_LIST)
+    NUMBER_OF_DIST_SAMPLES = len(DIST_SAMPLES)
+    PD = np.empty((NUMBER_OF_COUNT_MATRICES, NUMBER_OF_DIST_SAMPLES))
     
-    # PD = [_jc_posterior_ng(countMatrix, distSamples) for countMatrix in countMatrixList]
-
-    for i, countMatrix in enumerate(countMatrixList):
-        L = _jc_posterior_ng(countMatrix, distSamples)
-        PD[i,:] = L
-        
+    PD = np.array([_jc_posterior_ng(COUNT_MATRIX, DIST_SAMPLES) for COUNT_MATRIX in COUNT_MATRIX_LIST])
     return PD
         

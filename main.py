@@ -27,8 +27,8 @@ def _main():
     SUM_MATRIX = np.sum(0.5 * (MATRIX + MATRIX.transpose()) for MATRIX in COUNT_MATRIX_LIST)
     P_SUM = SUM_MATRIX / SUM_MATRIX.sum(axis=1, keepdims=True)    # Make every row sum to 1
 
-    eigenValues, VR = eig(P_SUM, left=False, right=True)
-    assert np.all([eigenValue.imag == 0 for eigenValue in eigenValues]), "Some eigenvalue is complex"
+    EIGEN_VALUES, VR = eig(P_SUM, left=False, right=True)
+    assert np.all([EIGEN_VALUE.imag == 0 for EIGEN_VALUE in EIGEN_VALUES]), "Some eigenvalue is complex"
     VL = np.linalg.inv(VR)
 
     # #
@@ -36,16 +36,16 @@ def _main():
     # # This is recognized as the row (because we will be looking at the 'right'
     # # eigenvectors, not the usual left) with all positive or all negative elements.
     # #
-    zeroEigenVectorsList = [eigenVector for eigenVector in VL if all(eigenVector > 0) or all(eigenVector < 0)]
-    assert len(zeroEigenVectorsList) == 1, "To many or to few potential zero eigenvectors"
-    EQ = zeroEigenVectorsList.pop()
+    ZERO_EIGEN_VECTOR_LIST = [EIGEN_VECTOR for EIGEN_VECTOR in VL if all(EIGEN_VECTOR > 0) or all(EIGEN_VECTOR < 0)]
+    assert len(ZERO_EIGEN_VECTOR_LIST) == 1, "To many or to few potential zero eigenvectors"
+    EQ = ZERO_EIGEN_VECTOR_LIST[0]
     EQ = EQ / EQ.sum()  # Make elements of EQ sum to 1
 
     #   Get a first simple estimate of Q using a Jukes-Cantor model
     DIST_SAMPLES = np.arange(1, 400, 5)
     POSTERIOR = comp_posterior_JC(COUNT_MATRIX_LIST, DIST_SAMPLES)   # posterior.shape = (10, 80). Rows are identical to Octave but in different order
     W = POSTERIOR.sum(axis=0)
-    PW = matrix_weight(COUNT_MATRIX_LIST, POSTERIOR, DIST_SAMPLES)   #   Seems identical to octave. Alot of NaN
+    PW = matrix_weight(COUNT_MATRIX_LIST, POSTERIOR, DIST_SAMPLES)
     Q = estimate_q(PW, W, VL, VR, EQ, DIST_SAMPLES)
 
     #   Set loop variables

@@ -22,15 +22,16 @@ def _normalize_rows(matrixSum):
 #
 # PW is a list, with the sum of count matrices weighted by their posterior probability
 # for evolutionary distance D. PW(D) is ...
-def matrix_weight(countMatrixList, posterior, distSamples):
-    PW = []
-    
-    for j,_ in enumerate(distSamples):
+def matrix_weight(COUNT_MATRIX_LIST, POSTERIOR, DIST_SAMPLES):
+    NUMBER_OF_DIST_SAMPLES = len(DIST_SAMPLES)
+    PW = np.empty((NUMBER_OF_DIST_SAMPLES, 20, 20))
+
+    for j,_ in enumerate(DIST_SAMPLES):
         P = np.zeros((20,20))
         
-        for i, countMatrix in enumerate(countMatrixList):
-            P += posterior[i, j] * countMatrix
+        for i, COUNT_MATRIX in enumerate(COUNT_MATRIX_LIST):
+            P += POSTERIOR[i, j] * COUNT_MATRIX
         
-        PW.append(_normalize_rows(P))
-        
+        PW[j] = _normalize_rows(P)
+
     return PW
