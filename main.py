@@ -24,11 +24,11 @@ def _main():
     COUNT_MATRIX_LIST = create_count_matrices(CLOSEST_PAIRS)
 
     #   These are constant throughout the iterations
-    sumMatrix = sum(0.5 * (matrix + matrix.transpose()) for matrix in COUNT_MATRIX_LIST)
-    P_SUM = sumMatrix / sumMatrix.sum(axis=1, keepdims=True)    # Make every row sum to 1
+    SUM_MATRIX = np.sum(0.5 * (MATRIX + MATRIX.transpose()) for MATRIX in COUNT_MATRIX_LIST)
+    P_SUM = SUM_MATRIX / SUM_MATRIX.sum(axis=1, keepdims=True)    # Make every row sum to 1
 
     eigenValues, VR = eig(P_SUM, left=False, right=True)
-    eigenValues = eigenValues.real
+    assert np.all([eigenValue.imag == 0 for eigenValue in eigenValues]), "Some eigenvalue is complex"
     VL = np.linalg.inv(VR)
 
     # #

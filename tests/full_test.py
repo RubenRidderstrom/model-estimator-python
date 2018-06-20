@@ -24,11 +24,3 @@ def test_output(tmpdir):
     #   Assert that calculated and references are close. Expected to pass
     assert(np.allclose(CALCULATED_Q, REFERENCE_Q))
     assert(np.allclose(CALCULATED_EQ, REFERENCE_EQ))
-
-    #   Assert calculated and reference are element wise equal. Expected to fail.
-    #   Only here to quickly be able to eyeball how big difference is
-    for i,_ in np.ndenumerate(CALCULATED_Q):
-        assert(CALCULATED_Q[i] == REFERENCE_Q[i])
-
-    for i,_ in np.ndenumerate(CALCULATED_EQ):
-        assert(CALCULATED_EQ[i] == REFERENCE_EQ[i])
