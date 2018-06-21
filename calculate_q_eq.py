@@ -1,7 +1,6 @@
 import os
 import sys
 import numpy as np
-from handle_input_file import handle_input_file
 from match_closest_pair import match_closest_pairs
 from create_count_matrices import create_count_matrices
 from comp_posterior_JC import comp_posterior_JC
