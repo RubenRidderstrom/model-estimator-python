@@ -41,7 +41,7 @@ def _weighted_estimate_eigenvals(PW, W, VL, VR, DIST_SAMPLES):
     # Gather some datapoints
     for i, DIST_SAMPLE in enumerate(DIST_SAMPLES):
         P = PW[i]
-        ELAMBDA = np.diag(VL @ P @ VR)  # @ = Matrix multiplication of arrays
+        ELAMBDA = np.diag(VL @ P @ VR)
         WEIGHT = W[i]
         X[i] = DIST_SAMPLE / 100 * WEIGHT
 
