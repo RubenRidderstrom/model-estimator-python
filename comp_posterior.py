@@ -1,8 +1,7 @@
 import numpy as np
 import scipy
 
-### Definitions
-
+### Private functions
 #
 # Addition of log-probabilities
 #
@@ -55,14 +54,6 @@ def _my_posterior_pre(COUNT_MATRIX, PRE_PT, DIST_SAMPLES):
     POSTERIOR_VEC = np.exp(L - P_TOT)
     return POSTERIOR_VEC
 
-def _precompute_exp_q_vec(Q, EQ, DIST_SAMPLES):
-    pre_pt = []
-    
-    for i, DIST_SAMPLE in enumerate(DIST_SAMPLES):
-        pre_pt.append(np.log(np.diag(EQ) @ scipy.linalg.expm(Q * DIST_SAMPLE)))
-        
-    return pre_pt
-
 ### Interface
 
 # Given an estimate of Q, compute posterior probabilities for all
@@ -72,15 +63,17 @@ def _precompute_exp_q_vec(Q, EQ, DIST_SAMPLES):
 # exponentials all the time. 
 #
 def comp_posterior(COUNT_MATRIX_LIST, Q, EQ, DIST_SAMPLES):   
-    PRE_PT = _precompute_exp_q_vec (Q, EQ, DIST_SAMPLES)
+    # # PRE_PT = DIST_SAMPLES[:]
+    # squarer = lambda t: np.log(np.diag(EQ) @ scipy.linalg.expm(Q * t))
+    # minVectorizer = np.vectorize(squarer)
+    # PRE_PT = minVectorizer(DIST_SAMPLES)
+    PRE_PT = np.empty(len(DIST_SAMPLES))
+    PRE_PT = np.array([np.log(np.diag(EQ) @ scipy.linalg.expm(Q * DIST_SAMPLE)) for DIST_SAMPLE in DIST_SAMPLES])   # _precompute_exp_q_vec
     
     MATRIX_LIST_LENGTH = len(COUNT_MATRIX_LIST)
     DIST_SAMPLES_LENGTH = len(DIST_SAMPLES)
-    PD = np.zeros(shape=(MATRIX_LIST_LENGTH, DIST_SAMPLES_LENGTH))
-    
-    for i, COUNT_MATRIX in enumerate(COUNT_MATRIX_LIST):
-        L = _my_posterior_pre(COUNT_MATRIX, PRE_PT, DIST_SAMPLES)
-        PD[i, :] = PD[i,:] + L
+    PD = np.empty((MATRIX_LIST_LENGTH, DIST_SAMPLES_LENGTH))
+    PD = np.array([_my_posterior_pre(COUNT_MATRIX, PRE_PT, DIST_SAMPLES) for COUNT_MATRIX in COUNT_MATRIX_LIST])
 
     return PD
         
