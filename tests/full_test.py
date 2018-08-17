@@ -3,8 +3,7 @@ import numpy as np
 import os
 import sys
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
-
-from modelestimator import modelestimator
+import modelestimator
 
 def test_output(tmpdir):
     #   Create directory paths
@@ -22,7 +21,7 @@ def test_output(tmpdir):
     REFERENCE_EQ = np.load(REFERENCE_EQ_PATH)
 
     #   Calculate Q and EQ
-    CALCULATED_Q, CALCULATED_EQ = modelestimator(FILE_PATH)
+    CALCULATED_Q, CALCULATED_EQ = modelestimator.modelestimator(FILE_PATH)
 
     #   Assert that calculated and references are close. Expected to pass
     assert(np.allclose(CALCULATED_Q, REFERENCE_Q))
