@@ -40,22 +40,20 @@ def _weighted_estimate_eigenvals(PW, W, VL, VR, DIST_SAMPLES):
 
     # Gather some datapoints
     for i, DIST_SAMPLE in enumerate(DIST_SAMPLES):
-        P = PW[i]
-        ELAMBDA = np.diag(VL @ P @ VR)
-        WEIGHT = W[i]
-        X[i] = DIST_SAMPLE / 100 * WEIGHT
+        ELAMBDA = np.diag(VL @ PW[i] @ VR)
+        X[i] = (DIST_SAMPLE / 100) * W[i]
 
         for li in range(20):
             if (li == NULL_VECTOR_INDEX):
                 continue
         
             if (ELAMBDA[li] > 0):    # Skip complex value data points!
-                Y[li, i] = np.real(np.log(ELAMBDA[li])) * WEIGHT
+                Y[li, i] = np.real(np.log(ELAMBDA[li])) * W[i]
             else:
                 X[i] = 0   # No disturbance if set to 0!
                 Y[li, i] = 0
 
-    L = np.empty(20)
+    L = np.zeros(20)
 
     for i,_ in enumerate(L):
         if(i == NULL_VECTOR_INDEX):

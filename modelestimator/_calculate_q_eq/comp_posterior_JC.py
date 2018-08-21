@@ -23,13 +23,6 @@ def _jc_posterior_ng(COUNT_MATRIX, DIST_SAMPLES):
     return POSTERIOR_VEC    
     
 ### Interface
-
-# Given an estimate of Q, compute posterior probabilities for all
-# distances for all seq pairs. 
-#
-# Similar to previous comp_posterior, but not re-computing matrix
-# exponentials all the time. 
-#
 def comp_posterior_JC(COUNT_MATRIX_LIST, DIST_SAMPLES):
     NUMBER_OF_COUNT_MATRICES = len(COUNT_MATRIX_LIST)
     NUMBER_OF_DIST_SAMPLES = len(DIST_SAMPLES)

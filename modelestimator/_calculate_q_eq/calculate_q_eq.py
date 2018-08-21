@@ -14,19 +14,22 @@ def calculate_q_eq(SEQUENCE_LIST):
     CLOSEST_PAIRS = match_closest_pairs(SEQUENCE_LIST)
     COUNT_MATRIX_LIST = create_count_matrices(CLOSEST_PAIRS)
 
+    #   VL = Inverse of right eigenvectorts
+    #   VR = Right eigenvectors
+    #   EQ = Right eigenvector corresponding to zero eigenvalue but normalized so it sums to 1
     VL, VR, EQ = find_eigens(COUNT_MATRIX_LIST)
 
     #   Get a first simple estimate of Q using a Jukes-Cantor model
     DIST_SAMPLES = np.arange(1, 400, 5)
     POSTERIOR = comp_posterior_JC(COUNT_MATRIX_LIST, DIST_SAMPLES)   # posterior.shape = (10, 80). Rows are identical to Octave but in different order
+    PW = matrix_weight(COUNT_MATRIX_LIST, POSTERIOR, DIST_SAMPLES)    
     W = POSTERIOR.sum(axis=0)
-    PW = matrix_weight(COUNT_MATRIX_LIST, POSTERIOR, DIST_SAMPLES)
     q = estimate_q(PW, W, VL, VR, EQ, DIST_SAMPLES)
 
     #   Set loop variables
     difference = float("inf")
-    iteration = 0
     THRESHOLD = 0.001
+    iteration = 0
     MAX_ITERATIONS = 10
 
     #   Calculate Q

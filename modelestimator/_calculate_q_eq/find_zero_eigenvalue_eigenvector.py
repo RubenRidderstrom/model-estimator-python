@@ -9,4 +9,5 @@ def find_zero_eigenvalue_eigenvector(MATRIX):
     assert not (len(ZERO_EIGEN_VECTOR_ARRAY) == 0), "No candidate for null-vector!" 
     EIGEN_VECTOR, INDEX = ZERO_EIGEN_VECTOR_ARRAY[0]
 
-    return EIGEN_VECTOR, INDEX
+    #   Returns as list to return copy and not reference
+    return list(EIGEN_VECTOR), INDEX
