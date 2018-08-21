@@ -9,9 +9,9 @@ from .estimate_q import estimate_q
 from .simple_estimation import simple_estimation
 from .find_eigens import find_eigens
 
-def calculate_q_eq(SEQUENCE_LIST):
+def calculate_q_eq(SEQUENCE_LIST, COMPARE_INDELS_FLAG):
     #   Create count matrix list
-    CLOSEST_PAIRS = match_closest_pairs(SEQUENCE_LIST)
+    CLOSEST_PAIRS = match_closest_pairs(SEQUENCE_LIST, COMPARE_INDELS_FLAG)
     COUNT_MATRIX_LIST = create_count_matrices(CLOSEST_PAIRS)
 
     #   VL = Inverse of right eigenvectorts
