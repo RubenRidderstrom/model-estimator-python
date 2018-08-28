@@ -29,14 +29,14 @@ def calculate_q_eq(SEQUENCE_LIST, COMPARE_INDELS_FLAG):
     #   Set loop variables
     difference = float("inf")
     THRESHOLD = 0.001
-    iteration = 0
+    iterations = 0
     MAX_ITERATIONS = 10
-
+    
     #   Calculate Q
-    while (iteration < MAX_ITERATIONS and difference > THRESHOLD):
-        iteration += 1
+    while (iterations < MAX_ITERATIONS and difference > THRESHOLD):
+        iterations += 1
         q_new = simple_estimation(COUNT_MATRIX_LIST, q, VL, VR, EQ, DIST_SAMPLES)
         difference = np.linalg.norm(q_new - q)
         q = q_new
 
-    return q, EQ
+    return q, EQ, iterations

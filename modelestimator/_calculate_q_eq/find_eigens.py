@@ -4,7 +4,10 @@ from .find_zero_eigenvalue_eigenvector import find_zero_eigenvalue_eigenvector
 
 def find_eigens(COUNT_MATRIX_LIST):
     P_SUM = np.sum(0.5 * (MATRIX + MATRIX.T) for MATRIX in COUNT_MATRIX_LIST)
-    P_SUM /= np.linalg.norm(P_SUM, axis=1, ord=1, keepdims=1)   #   Make every row of P_SUM sum to 1
+
+    # Make every row sum to 1
+    ROW_SUMS = np.linalg.norm(P_SUM, axis=1, ord=1, keepdims=1)
+    P_SUM = np.divide(P_SUM, ROW_SUMS, out=np.zeros_like(P_SUM), where=ROW_SUMS != 0)   # Only divide where the row sum is non-zero
 
     EIGEN_VALUES, VR = eig(P_SUM, left=False, right=True)   #   Calculate eigenvalues and the right eigenvectors of P_SUM
     assert np.all(np.isreal(EIGEN_VALUES)), "An eigenvalue is complex"

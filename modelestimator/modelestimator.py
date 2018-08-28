@@ -6,6 +6,6 @@ from ._calculate_q_eq.calculate_q_eq import calculate_q_eq
 # COMPARE_INDELS_FLAG decides if indels should be included when comparing likeness of sequences
 def modelestimator(FILE_PATH, COMPARE_INDELS_FLAG = False):
     SEQUENCE_LIST = handle_input_file(FILE_PATH)
-    Q, EQ = calculate_q_eq(SEQUENCE_LIST, COMPARE_INDELS_FLAG)
+    Q, EQ,_ = calculate_q_eq(SEQUENCE_LIST, COMPARE_INDELS_FLAG)
     
     return Q, EQ
