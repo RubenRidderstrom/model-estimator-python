@@ -2,25 +2,20 @@ import copy
 import random
 from ._calculate_q_eq.calculate_q_eq import calculate_q_eq
 from ._handle_input.handle_input_file import handle_input_file
+import numpy as np
 
-# Private functions
-def _remove_position(STRING, POSITION):
-    assert POSITION >= 0 and POSITION <= (len(STRING) - 1)
-    return STRING[:POSITION]+STRING[POSITION+1:]
-
-def _remove_columns(sequence_list):
-    PERCENTAGE_OF_COLUMNS_TO_REMOVE = 0.62
+def _resample_columns(sequence_list):
+    return_list = [""] * len(sequence_list)
     SEQUENCE_LENGTH = len(sequence_list[0])
-    NUMBER_OF_COLUMNS_TO_REMOVE = int(SEQUENCE_LENGTH * PERCENTAGE_OF_COLUMNS_TO_REMOVE)
 
-    for _ in range(NUMBER_OF_COLUMNS_TO_REMOVE):
-        REMAINING_COLUMNS = len(sequence_list[0])
-        index = random.randint(0, REMAINING_COLUMNS - 1)
+    for _ in range(SEQUENCE_LENGTH):
+        RANDOM_INDEX = random.randint(0, SEQUENCE_LENGTH - 1)
 
-        for seq_index,sequence in enumerate(sequence_list):
-            sequence_list[seq_index] = _remove_position(sequence, index)
+        for SEQUENCE_INDEX, SEQUENCE in enumerate(sequence_list):
+            SEQUENCE_ELEMENT = SEQUENCE[RANDOM_INDEX]
+            return_list[SEQUENCE_INDEX] = return_list[SEQUENCE_INDEX] + SEQUENCE_ELEMENT
 
-    return sequence_list
+    return return_list
 
 # Interface
 def bootstrap(FILE_PATH):
@@ -31,10 +26,15 @@ def bootstrap(FILE_PATH):
 
     for _ in range(NUMBER_OF_MATRICES):
         sequence_list_copy = copy.deepcopy(SEQUENCE_LIST)
-        sequence_list_copy = _remove_columns(sequence_list_copy)
-        Q, EQ = calculate_q_eq(sequence_list_copy, False)
+        sequence_list_copy = _resample_columns(sequence_list_copy)
+        Q, EQ, _ = calculate_q_eq(sequence_list_copy, False)
 
         q_list.append(Q)
         eq_list.append(EQ)
 
-    # Use q_list and eq_list here
+    for index, _ in enumerate(q_list):
+        S = q_list[index] / eq_list[index]
+        np.fill_diagonal(S, 0)
+        S = np.triu(S)
+        S *= 10000
+        S_NORM = np.linalg.norm(S)

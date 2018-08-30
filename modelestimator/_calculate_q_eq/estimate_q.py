@@ -37,7 +37,7 @@ def _weighted_estimate_eigenvals(PW, W, VL, VR, DIST_SAMPLES):
     
     # Find the eigenvector corresponding to eigenvalue = 1
     _, NULL_VECTOR_INDEX = find_zero_eigenvalue_eigenvector(VL)
-
+    
     # Gather some datapoints
     for i, DIST_SAMPLE in enumerate(DIST_SAMPLES):
         ELAMBDA = np.diag(VL @ PW[i] @ VR)
