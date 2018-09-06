@@ -1,3 +1,5 @@
+import numpy as np
+
 ### Private functions
 def _matching_letters(a,b, COMPARE_INDELS_FLAG):
     assert(len(a) == len(b))
@@ -9,9 +11,7 @@ def _matching_letters(a,b, COMPARE_INDELS_FLAG):
             if x == y and x != '-' :
                 number_of_matching_positions += 1
     else:
-        for x,y in zip(a,b):
-            if x==y:
-                number_of_matching_positions += 1
+        number_of_matching_positions = np.sum(a==b) # Faster than then indels have to be ignored
            
     return number_of_matching_positions
 
