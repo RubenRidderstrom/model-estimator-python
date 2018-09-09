@@ -1,8 +1,6 @@
-## Usage
+This program estimates amino acid replacement rates from an input of aligned sequences.
 
-```
-Usage: 
-In modelestimator root folder
-"python -m modelestimator <infile>"
-where infile is in Fasta format
-```
+Usage: modelestimator <infiles>
+
+The infiles should be in FASTA
+Output is a rate matrix and residue distribution vector.
