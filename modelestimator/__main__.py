@@ -4,7 +4,7 @@ from modelestimator import modelestimator
 
 def main():
     if len(sys.argv) == 1:
-        print("Usage: modelestimator <infiles>")
+        print("Usage: python -m modelestimator infiles")
         print("\n")
         print("The infiles should be in FASTA")
         print("Output is a rate matrix and residue distribution vector.")

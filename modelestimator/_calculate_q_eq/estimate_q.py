@@ -5,13 +5,8 @@ from .find_zero_eigenvalue_eigenvector import find_zero_eigenvalue_eigenvector
 
 # Scale Q so that the average mutation rate is 0.01
 def scale_q(Q, EQ):
-        tmp_vector = np.dot(EQ, (-np.diag(Q))) * 100
-        
-        if np.any(tmp_vector == 0):    # TODO: Fix
-            raise ValueError('Divison with zero in scale_q')
-        
-        Q /= tmp_vector
-        
+        Q /= np.dot(EQ, (-np.diag(Q))) * 100
+                
         return Q
 
 #   Sometimes, when data is sparse, Q estimates come out with 
