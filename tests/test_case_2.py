@@ -21,7 +21,8 @@ def test_case_2(tmpdir):
     REFERENCE_EQ = np.load(REFERENCE_EQ_PATH)
 
     #   Calculate Q and EQ
-    CALCULATED_Q, CALCULATED_EQ = modelestimator.modelestimator(FILE_PATH)
+    FILE_PATH_LIST = [FILE_PATH]
+    CALCULATED_Q, CALCULATED_EQ = modelestimator.modelestimator(FILE_PATH_LIST)
 
     #   Assert that calculated and references are close. Expected to pass
     assert(np.allclose(CALCULATED_Q, REFERENCE_Q))

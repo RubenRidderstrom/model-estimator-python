@@ -63,7 +63,8 @@ def comp_posterior(COUNT_MATRIX_LIST, Q, EQ, DIST_SAMPLES):
     PRE_PT = np.array([
         np.log(np.diag(EQ) @ scipy.linalg.expm(Q * DIST_SAMPLE))
         for DIST_SAMPLE in DIST_SAMPLES])
-    
+
+
     MATRIX_LIST_LENGTH = len(COUNT_MATRIX_LIST)
     PD = np.empty((MATRIX_LIST_LENGTH, NUMBER_OF_DIST_SAMPLES))
     PD = np.array([_my_posterior_pre(COUNT_MATRIX, PRE_PT, DIST_SAMPLES) for COUNT_MATRIX in COUNT_MATRIX_LIST])

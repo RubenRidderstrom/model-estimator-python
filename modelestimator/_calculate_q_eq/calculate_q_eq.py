@@ -1,19 +1,13 @@
 import os
 import sys
 import numpy as np
-from .match_closest_pair import match_closest_pairs
-from .create_count_matrices import create_count_matrices
 from .comp_posterior_JC import comp_posterior_JC
 from .matrix_weight import matrix_weight
 from .estimate_q import estimate_q
 from .simple_estimation import simple_estimation
 from .find_eigens import find_eigens
 
-def calculate_q_eq(SEQUENCE_LIST, COMPARE_INDELS_FLAG):
-    #   Create count matrix list
-    CLOSEST_PAIRS = match_closest_pairs(SEQUENCE_LIST, COMPARE_INDELS_FLAG)
-    COUNT_MATRIX_LIST = create_count_matrices(CLOSEST_PAIRS)
-
+def calculate_q_eq(COUNT_MATRIX_LIST):
     #   VL = Inverse of right eigenvectorts
     #   VR = Right eigenvectors
     #   EQ = Right eigenvector corresponding to zero eigenvalue but normalized so it sums to 1
