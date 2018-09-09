@@ -22,7 +22,8 @@ def test_case_2(tmpdir):
 
     #   Calculate Q and EQ
     FILE_PATH_LIST = [FILE_PATH]
-    CALCULATED_Q, CALCULATED_EQ = modelestimator.modelestimator(FILE_PATH_LIST)
+    THRESHOLD = 0.001
+    CALCULATED_Q, CALCULATED_EQ = modelestimator.modelestimator(FILE_PATH_LIST, THRESHOLD)
 
     #   Assert that calculated and references are close. Expected to pass
     assert(np.allclose(CALCULATED_Q, REFERENCE_Q))

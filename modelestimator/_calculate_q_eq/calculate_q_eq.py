@@ -7,7 +7,7 @@ from .estimate_q import estimate_q
 from .simple_estimation import simple_estimation
 from .find_eigens import find_eigens
 
-def calculate_q_eq(COUNT_MATRIX_LIST):
+def calculate_q_eq(COUNT_MATRIX_LIST, THRESHOLD):
     #   VL = Inverse of right eigenvectorts
     #   VR = Right eigenvectors
     #   EQ = Right eigenvector corresponding to zero eigenvalue but normalized so it sums to 1
@@ -22,7 +22,6 @@ def calculate_q_eq(COUNT_MATRIX_LIST):
 
     #   Set loop variables
     difference = float("inf")
-    THRESHOLD = 0.001
     iterations = 0
     MAX_ITERATIONS = 10
     
@@ -33,4 +32,4 @@ def calculate_q_eq(COUNT_MATRIX_LIST):
         difference = np.linalg.norm(q_new - q)
         q = q_new
 
-    return q, EQ, iterations
+    return q, EQ
