@@ -1,40 +1,62 @@
+import os
 import sys
-import numpy as np
+import argparse
 from modelestimator import modelestimator
 
 def print_usage():
-        print("""Usage: python -m modelestimator options infiles
-        
-The infiles should be in FASTA
+        print("""Usage: python -m modelestimator <format> <options> infiles
+
+<format> should be either FASTA, STOCKHOLM or PHYLIP
 Output is a rate matrix and residue distribution vector.
         
 Options:
-    -threshold <f> Stop when consecutive iterations do not change by more
-                   than <f>. Default is 0.001.
+    -threshold or -t <f> Stop when consecutive iterations do not change by more
+                     than <f>. Default is 0.001.
 """)
 
+def handle_input_argument(remainings_arguments):
+    FORMAT = remainings_arguments.pop(0)
+
+    if FORMAT not in ['fasta', 'stockholm', 'phylip']:
+        raise Exception()
+
+    #   Options
+    if remainings_arguments[0] == "-t":
+        remainings_arguments.pop(0)
+
+        THRESHOLD = float(remainings_arguments.pop(0))
+        if not(THRESHOLD < 1 and THRESHOLD > 0):
+            raise Exception()
+    else:
+        THRESHOLD = 0.001
+
+    return FORMAT, THRESHOLD, remainings_arguments
+
 def main():
-    if len(sys.argv) == 1:
+    input_list = sys.argv[1:]
+    try:
+        FORMAT, THRESHOLD, FILE_NAMES = handle_input_argument(input_list)
+    except:
+        print("Wrong format on input\n")
         print_usage()
         exit()
 
-    input_list = sys.argv[1:]
-    threshold = 0.001
+    #   File names
+    for FILE in FILE_NAMES:
+        if not os.path.isfile(FILE):
+            print("Unable to find file\n")
+            print_usage()
+            exit()
 
-    if input_list[0] == "-threshold":
-        threshold = float(input_list[1])
-        input_list = input_list[2:]
-
-    input_file_paths_list = []
-    for FILE_PATH in input_list:
-        input_file_paths_list.append(FILE_PATH)
-
+    #   Modelestimator
     try:
-        Q, EQ = modelestimator(input_file_paths_list, threshold)
-    except FileNotFoundError:
-        print("\nFile was not found")
+        Q, EQ = modelestimator(FILE_NAMES, THRESHOLD, FORMAT)
+    except ValueError as e:
+        print("Error: ", e)
         exit()
+        
 
+    #   Print output
     print("\nQ:")
     print(Q)
     print("\nEQ:")
