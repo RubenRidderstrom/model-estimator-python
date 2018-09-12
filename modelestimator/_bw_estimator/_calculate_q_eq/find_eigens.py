@@ -9,8 +9,14 @@ def find_eigens(COUNT_MATRIX_LIST):
     ROW_SUMS = np.linalg.norm(P_SUM, axis=1, ord=1, keepdims=1)
     P_SUM = np.divide(P_SUM, ROW_SUMS, out=np.zeros_like(P_SUM), where=ROW_SUMS != 0)   # Only divide where the row sum is non-zero
 
-    EIGEN_VALUES, VR = eig(P_SUM, left=False, right=True)   #   Calculate eigenvalues and the right eigenvectors of P_SUM
-    assert np.all(np.isreal(EIGEN_VALUES)), "An eigenvalue is complex"
+    try:
+        EIGEN_VALUES, VR = eig(P_SUM, left=False, right=True)   #   Calculate eigenvalues and the right eigenvectors of P_SUM
+    except ValueError:
+        raise ValueError("Unable to calculate eigenvalues")
+
+    if not np.all(np.isreal(EIGEN_VALUES)):
+        raise ValueError("An eigenvalue is complex")
+
     VL = np.linalg.inv(VR)
 
     EQ,_ = find_zero_eigenvalue_eigenvector(VL)

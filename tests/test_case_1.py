@@ -28,10 +28,6 @@ def test_case_1(tmpdir):
     THRESHOLD = 0.001
     CALCULATED_Q, CALCULATED_EQ = bw_estimator(FORMAT, THRESHOLD, MULTLIGNMENT_LIST)
 
-    np.set_printoptions(precision=5, linewidth=250, suppress=True)
-    print(CALCULATED_Q/REFERENCE_Q)
-
-
     #   Assert that calculated and references are close. Expected to pass
     assert(np.allclose(CALCULATED_Q, REFERENCE_Q))
     assert(np.allclose(CALCULATED_EQ, REFERENCE_EQ))
