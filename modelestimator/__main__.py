@@ -1,10 +1,8 @@
-import os
 import sys
-import argparse
-from modelestimator import modelestimator
+from modelestimator._parse_arguments import parse_arguments
+from modelestimator._controller import controller
 
-def print_usage():
-        print("""Usage: python -m modelestimator <format> <options> infiles
+USAGE_STRING ="""Usage: python -m modelestimator <format> <options> infiles
 
 <format> should be either FASTA, STOCKHOLM or PHYLIP
 Output is a rate matrix and residue distribution vector.
@@ -12,55 +10,31 @@ Output is a rate matrix and residue distribution vector.
 Options:
     -threshold or -t <f> Stop when consecutive iterations do not change by more
                      than <f>. Default is 0.001.
-""")
-
-def handle_input_argument(remainings_arguments):
-    FORMAT = remainings_arguments.pop(0)
-
-    if FORMAT not in ['fasta', 'stockholm', 'phylip']:
-        raise Exception()
-
-    #   Options
-    if remainings_arguments[0] == "-t":
-        remainings_arguments.pop(0)
-
-        THRESHOLD = float(remainings_arguments.pop(0))
-        if not(THRESHOLD < 1 and THRESHOLD > 0):
-            raise Exception()
-    else:
-        THRESHOLD = 0.001
-
-    return FORMAT, THRESHOLD, remainings_arguments
+    -bootstrap or -b <r> Perform bootstrapping on multialignment with <r> resamplings.
+                         Only one infile should be given in this mode. Returns
+                         bootstrap norm."""
 
 def main():
-    input_list = sys.argv[1:]
-    try:
-        FORMAT, THRESHOLD, FILE_NAMES = handle_input_argument(input_list)
-    except:
-        print("Wrong format on input\n")
-        print_usage()
+    ARGUMENT_LIST = sys.argv[1:]
+      
+    if len(ARGUMENT_LIST) == 0:
+        print(USAGE_STRING)
         exit()
-
-    #   File names
-    for FILE in FILE_NAMES:
-        if not os.path.isfile(FILE):
-            print("Unable to find file\n")
-            print_usage()
-            exit()
-
-    #   Modelestimator
+            
     try:
-        Q, EQ = modelestimator(FILE_NAMES, THRESHOLD, FORMAT)
-    except ValueError as e:
-        print("Error: ", e)
+        FORMAT, BOOTSTRAP, RESAMPLINGS, THRESHOLD, FILE_NAMES = parse_arguments(ARGUMENT_LIST)
+    except Exception as e:
+        print("Wrong format on input\n")
+        print(USAGE_STRING)
         exit()
         
+    try:
+        OUTPUT_STRING = controller(FORMAT, BOOTSTRAP, RESAMPLINGS, THRESHOLD, FILE_NAMES)
+    except Exception as e:
+        print("Error: ", e)
+        exit()
 
-    #   Print output
-    print("\nQ:")
-    print(Q)
-    print("\nEQ:")
-    print(EQ)
+    print(OUTPUT_STRING)
 
 if __name__ == '__main__':
     main()

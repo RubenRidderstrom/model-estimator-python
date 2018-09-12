@@ -1,9 +1,8 @@
 import copy
 import random
-from ._calculate_q_eq.calculate_q_eq import calculate_q_eq
-from ._handle_input.handle_input_file import handle_input_file
 import numpy as np
 import math
+from modelestimator._bw_estimator.bw_estimator import bw_estimator
 
 def _resample_columns(sequence_list):
     return_list = [""] * len(sequence_list)
@@ -18,23 +17,24 @@ def _resample_columns(sequence_list):
 
     return return_list
 
-def _calculate_q_for_resamplings(MULTIALIGNMENT_SEQUENCE_LIST, NUMBER_OF_RESAMPLINGS):
+def _calculate_bw_for_resamplings(FORMAT, RESAMPLINGS, THRESHOLD, MULTIALIGNMENT):
     q_list = []
     eq_list = []
-    number_of_times_calculate_q_eq_failed = 0
+    number_of_times_bw_estimator_failed = 0
 
-    for _ in range(NUMBER_OF_RESAMPLINGS):
-        sequence_list_copy = copy.deepcopy(MULTIALIGNMENT_SEQUENCE_LIST)
-        sequence_list_copy = _resample_columns(sequence_list_copy)
+    for _ in range(RESAMPLINGS):
+        MULTIALIGNMENT = copy.deepcopy(MULTIALIGNMENT)
+        MULTIALIGNMENT = _resample_columns(MULTIALIGNMENT)
+        MULTIALIGNMENT_LIST = [MULTIALIGNMENT]
 
         try:
-            Q, EQ, _ = calculate_q_eq(sequence_list_copy, False)
+            Q, EQ = bw_estimator(FORMAT, THRESHOLD, MULTIALIGNMENT_LIST)
             q_list.append(Q)
             eq_list.append(EQ)
         except:
-            number_of_times_calculate_q_eq_failed +=1
+            number_of_times_bw_estimator_failed +=1
 
-    FAILED_PERCENTAGE = number_of_times_calculate_q_eq_failed / NUMBER_OF_RESAMPLINGS
+    FAILED_PERCENTAGE = number_of_times_bw_estimator_failed / RESAMPLINGS
     return q_list, FAILED_PERCENTAGE
 
 def q_diff_mean(REFERENCE_Q, RESAMPLED_Q_LIST):
@@ -49,10 +49,13 @@ def q_diff_mean(REFERENCE_Q, RESAMPLED_Q_LIST):
 
     return Q_DIFF_MEAN
 
-# Interface
-def bootstrap(MULTIALIGNMENT_SEQUENCE_LIST, NUMBER_OF_RESAMPLINGS):
-    REFERENCE_Q, _, _ = calculate_q_eq(MULTIALIGNMENT_SEQUENCE_LIST, COMPARE_INDELS_FLAG = False)
-    RESAMPLED_Q_LIST, FAILED_PERCENTAGE = _calculate_q_for_resamplings(MULTIALIGNMENT_SEQUENCE_LIST, NUMBER_OF_RESAMPLINGS)
+#   Interface
+def bootstraper(FORMAT, RESAMPLINGS, THRESHOLD, MULTIALIGNMENT):
+    MULTIALIGNMENT_LIST = [MULTIALIGNMENT]
+    REFERENCE_Q,_ = bw_estimator(FORMAT, THRESHOLD, MULTIALIGNMENT_LIST)
+
+    RESAMPLED_Q_LIST, FAILED_PERCENTAGE = _calculate_bw_for_resamplings(FORMAT, RESAMPLINGS, THRESHOLD, MULTIALIGNMENT)
     Q_DIFF_MEAN = q_diff_mean(REFERENCE_Q, RESAMPLED_Q_LIST)
+    Q_DIFF_MEAN *= 10000
 
     return Q_DIFF_MEAN, FAILED_PERCENTAGE

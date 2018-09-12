@@ -1,29 +1,10 @@
-# import os
-# import sys
-# import numpy as np
-
-# ORIGIN_PATH = os.path.dirname(__file__)
-# MODELESTIMATOR_PATH = os.path.join(ORIGIN_PATH, "..")
-# sys.path.insert(1, MODELESTIMATOR_PATH)
-
-# from modelestimator.modelestimator import modelestimator
-
-# TEST_FILE_1_PATH = os.path.join(ORIGIN_PATH, "test_case_3\\JTT_balancedtree_32sequences_10000long_1.fa")
-# TEST_FILE_2_PATH = os.path.join(ORIGIN_PATH, "test_case_3\\JTT_balancedtree_32sequences_10000long_2.fa")
-# TEST_FILE_3_PATH = os.path.join(ORIGIN_PATH, "test_case_3\\JTT_balancedtree_32sequences_10000long_3.fa")
-# FILE_PATHS_LIST = [TEST_FILE_1_PATH, TEST_FILE_2_PATH, TEST_FILE_3_PATH]
-
-# Q, EQ = modelestimator(FILE_PATHS_LIST)
-
-# np.savetxt("Q",Q)
-# np.savetxt("EQ",EQ)
-
 import tempfile
 import numpy as np
 import os
 import sys
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
-import modelestimator
+from modelestimator._bw_estimator.bw_estimator import bw_estimator
+from modelestimator._handle_input.handle_input_file import handle_input_file
 
 def test_case_2(tmpdir):
         #   Create directory paths
@@ -43,8 +24,16 @@ def test_case_2(tmpdir):
 
     #   Calculate Q and EQ
     FILE_PATH_LIST = [FILE_PATH_1, FILE_PATH_2, FILE_PATH_3]
+    # THRESHOLD = 0.001
+    # CALCULATED_Q, CALCULATED_EQ = modelestimator.modelestimator(FILE_PATH_LIST, THRESHOLD)
+
+    FORMAT = "fasta"
+    MULTIALIGNMENT_LIST = []
+    for FILE in FILE_PATH_LIST:
+        MULTIALIGNMENT = handle_input_file(FILE, FORMAT)
+        MULTIALIGNMENT_LIST.append(MULTIALIGNMENT)
     THRESHOLD = 0.001
-    CALCULATED_Q, CALCULATED_EQ = modelestimator.modelestimator(FILE_PATH_LIST, THRESHOLD)
+    CALCULATED_Q, CALCULATED_EQ = bw_estimator(FORMAT, THRESHOLD, MULTIALIGNMENT_LIST)
 
     #   Assert that calculated and references are close. Expected to pass
     assert(np.allclose(CALCULATED_Q, REFERENCE_Q))

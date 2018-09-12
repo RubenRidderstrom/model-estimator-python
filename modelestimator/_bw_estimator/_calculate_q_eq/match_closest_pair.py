@@ -11,8 +11,8 @@ def _matching_letters(a,b, COMPARE_INDELS_FLAG):
             if x == y and x != '-' :
                 number_of_matching_positions += 1
     else:
-        number_of_matching_positions = np.sum(a==b) # Faster than then indels have to be ignored
-           
+        number_of_matching_positions = np.sum(a==b) # Faster than when indels have to be ignored
+                   
     return number_of_matching_positions
 
 ### Interface

@@ -3,7 +3,8 @@ import numpy as np
 import os
 import sys
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
-import modelestimator
+from modelestimator._bw_estimator.bw_estimator import bw_estimator
+from modelestimator._handle_input.handle_input_file import handle_input_file
 
 def test_case_1(tmpdir):
     #   Create directory paths
@@ -21,9 +22,15 @@ def test_case_1(tmpdir):
     REFERENCE_EQ = np.load(REFERENCE_EQ_PATH)
 
     #   Calculate Q and EQ
-    FILE_PATH_LIST = [FILE_PATH]
+    FORMAT = "fasta"
+    MULTIALIGNMENT = handle_input_file(FILE_PATH, FORMAT)
+    MULTLIGNMENT_LIST = [MULTIALIGNMENT]
     THRESHOLD = 0.001
-    CALCULATED_Q, CALCULATED_EQ = modelestimator.modelestimator(FILE_PATH_LIST, THRESHOLD)
+    CALCULATED_Q, CALCULATED_EQ = bw_estimator(FORMAT, THRESHOLD, MULTLIGNMENT_LIST)
+
+    np.set_printoptions(precision=5, linewidth=250, suppress=True)
+    print(CALCULATED_Q/REFERENCE_Q)
+
 
     #   Assert that calculated and references are close. Expected to pass
     assert(np.allclose(CALCULATED_Q, REFERENCE_Q))
