@@ -10,12 +10,12 @@ def controller(FORMAT, BOOTSTRAP, RESAMPLINGS, threshold, FILE_NAME_LIST):
         MULTIALIGNMENT_LIST.append(MULTIALIGNMENT) 
         
     if threshold == None:
-        threshold = 0.01
+        threshold = 0.001
     
     if BOOTSTRAP:
         MULTIALIGNMENT = MULTIALIGNMENT_LIST[0]
         BOOTSTRAP_NORM,_ = bootstraper(FORMAT, RESAMPLINGS, threshold, MULTIALIGNMENT)
-        OUTPUT_STRING = "Bootstrap norm * 10 000: " + str(BOOTSTRAP_NORM)
+        OUTPUT_STRING = "Bootstrap norm = " + str(BOOTSTRAP_NORM)
     else:
         Q, EQ = bw_estimator(FORMAT, threshold, MULTIALIGNMENT_LIST)
         OUTPUT_STRING = "Q =\n" + str(Q) + "\nEQ =\n" + str(EQ)   
