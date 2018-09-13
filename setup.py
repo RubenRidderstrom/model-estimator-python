@@ -8,7 +8,7 @@ with open("README.txt", "r") as fh:
 	
 setuptools.setup(
 	name='modelestimator_v2',
-	version='0.0.2',
+	version='0.0.3',
 	author='Ruben Ridderström',
 	author_email='ruben.ridderstrom@gmail.com',
 	description='Program for estimating amino acid replacement rates',
