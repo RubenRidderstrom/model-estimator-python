@@ -3,7 +3,7 @@ import os
 import io
 from contextlib import redirect_stdout
 import numpy as np
-from modelestimator.__main__ import main
+from modelestimator.main import main
 
 def test_integration_1():
     #   Load REFERENCE_OUTPUT_STRING

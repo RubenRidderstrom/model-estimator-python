@@ -3,7 +3,7 @@ from scipy.linalg import eig
 from .find_zero_eigenvalue_eigenvector import find_zero_eigenvalue_eigenvector
 
 def find_eigens(COUNT_MATRIX_LIST):
-    P_SUM = np.sum(0.5 * (MATRIX + MATRIX.T) for MATRIX in COUNT_MATRIX_LIST)
+    P_SUM = sum(0.5 * (MATRIX + MATRIX.T) for MATRIX in COUNT_MATRIX_LIST)
 
     # Make every row sum to 1
     ROW_SUMS = np.linalg.norm(P_SUM, axis=1, ord=1, keepdims=1)
