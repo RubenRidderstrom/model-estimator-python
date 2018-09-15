@@ -1,8 +1,9 @@
 import numpy as np
-from Bio import SeqIO,AlignIO
+from Bio import AlignIO
 
 def handle_input_file(FILE_PATH, FORMAT):
-    sequence_list = SeqIO.parse(FILE_PATH, "fasta")
+    sequence_list = AlignIO.read(FILE_PATH, "fasta")
+
     sequence_list = [sequence.seq._data for sequence in sequence_list]
     
     for index, sequence in enumerate(sequence_list):
