@@ -5,8 +5,8 @@ import math
 import sys
 import os
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-from modelestimator.modelestimator._bw_estimator.bw_estimator import bw_estimator
+sys.path.insert(1, os.path.join(os.path.dirname(__file__), ".."))
+from modelestimator._bw_estimator.bw_estimator import bw_estimator
 
 def _resample_columns(sequence_list):
     return_list = [""] * len(sequence_list)
