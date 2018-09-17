@@ -3,7 +3,7 @@ from ._calculate_q_eq.create_count_matrices import create_count_matrices
 from ._calculate_q_eq.calculate_q_eq import calculate_q_eq
 
 # COMPARE_INDELS_FLAG decides if indels should be included when comparing likeness of sequences
-def bw_estimator(FORMAT, THRESHOLD, MULTIALIGNMENT_LIST, COMPARE_INDELS_FLAG = False):
+def bw_estimator(THRESHOLD, MULTIALIGNMENT_LIST, COMPARE_INDELS_FLAG = False):
     aggregated_count_matrix_list = []
     
     for MULTIALIGNMENT in MULTIALIGNMENT_LIST:

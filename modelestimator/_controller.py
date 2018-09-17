@@ -14,10 +14,10 @@ def controller(FORMAT, BOOTSTRAP, RESAMPLINGS, threshold, FILE_NAME_LIST):
     
     if BOOTSTRAP:
         MULTIALIGNMENT = MULTIALIGNMENT_LIST[0]
-        BOOTSTRAP_NORM,_ = bootstraper(FORMAT, RESAMPLINGS, threshold, MULTIALIGNMENT)
+        BOOTSTRAP_NORM,_ = bootstraper(RESAMPLINGS, threshold, MULTIALIGNMENT)
         OUTPUT_STRING = "Bootstrap norm = " + str(BOOTSTRAP_NORM)
     else:
-        Q, EQ = bw_estimator(FORMAT, threshold, MULTIALIGNMENT_LIST)
+        Q, EQ = bw_estimator(threshold, MULTIALIGNMENT_LIST)
         OUTPUT_STRING = "Q =\n" + str(Q) + "\nEQ =\n" + str(EQ)   
 
     return OUTPUT_STRING

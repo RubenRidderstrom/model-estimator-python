@@ -21,7 +21,7 @@ def _resample_columns(sequence_list):
 
     return return_list
 
-def _calculate_bw_for_resamplings(FORMAT, RESAMPLINGS, THRESHOLD, MULTIALIGNMENT):
+def _calculate_bw_for_resamplings(RESAMPLINGS, THRESHOLD, MULTIALIGNMENT):
     q_list = []
     eq_list = []
     number_of_times_bw_estimator_failed = 0
@@ -32,7 +32,7 @@ def _calculate_bw_for_resamplings(FORMAT, RESAMPLINGS, THRESHOLD, MULTIALIGNMENT
         MULTIALIGNMENT_LIST = [TMP_MULTIALIGNMENT]
 
         try:
-            Q, EQ = bw_estimator(FORMAT, THRESHOLD, MULTIALIGNMENT_LIST)
+            Q, EQ = bw_estimator(THRESHOLD, MULTIALIGNMENT_LIST)
             q_list.append(Q)
             eq_list.append(EQ)
         except:
@@ -55,11 +55,11 @@ def q_diff_mean(REFERENCE_Q, RESAMPLED_Q_LIST):
     return Q_DIFF_MEAN
 
 #   Interface
-def bootstraper(FORMAT, RESAMPLINGS, THRESHOLD, MULTIALIGNMENT):
+def bootstraper(RESAMPLINGS, THRESHOLD, MULTIALIGNMENT):
     MULTIALIGNMENT_LIST = [MULTIALIGNMENT]
-    REFERENCE_Q,_ = bw_estimator(FORMAT, THRESHOLD, MULTIALIGNMENT_LIST)
+    REFERENCE_Q,_ = bw_estimator(THRESHOLD, MULTIALIGNMENT_LIST)
 
-    RESAMPLED_Q_LIST, FAILED_PERCENTAGE = _calculate_bw_for_resamplings(FORMAT, RESAMPLINGS, THRESHOLD, MULTIALIGNMENT)
+    RESAMPLED_Q_LIST, FAILED_PERCENTAGE = _calculate_bw_for_resamplings(RESAMPLINGS, THRESHOLD, MULTIALIGNMENT)
     Q_DIFF_MEAN = q_diff_mean(REFERENCE_Q, RESAMPLED_Q_LIST)
     Q_DIFF_MEAN *= 10000
 

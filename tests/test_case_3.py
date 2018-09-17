@@ -24,16 +24,13 @@ def test_case_2(tmpdir):
 
     #   Calculate Q and EQ
     FILE_PATH_LIST = [FILE_PATH_1, FILE_PATH_2, FILE_PATH_3]
-    # THRESHOLD = 0.001
-    # CALCULATED_Q, CALCULATED_EQ = modelestimator.modelestimator(FILE_PATH_LIST, THRESHOLD)
-
     FORMAT = "fasta"
     MULTIALIGNMENT_LIST = []
     for FILE in FILE_PATH_LIST:
         MULTIALIGNMENT = handle_input_file(FILE, FORMAT)
         MULTIALIGNMENT_LIST.append(MULTIALIGNMENT)
     THRESHOLD = 0.001
-    CALCULATED_Q, CALCULATED_EQ = bw_estimator(FORMAT, THRESHOLD, MULTIALIGNMENT_LIST)
+    CALCULATED_Q, CALCULATED_EQ = bw_estimator(THRESHOLD, MULTIALIGNMENT_LIST)
 
     #   Assert that calculated and references are close. Expected to pass
     assert(np.allclose(CALCULATED_Q, REFERENCE_Q))
