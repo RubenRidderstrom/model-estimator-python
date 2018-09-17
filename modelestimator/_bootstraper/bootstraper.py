@@ -2,7 +2,11 @@ import copy
 import random
 import numpy as np
 import math
-from modelestimator._bw_estimator.bw_estimator import bw_estimator
+import sys
+import os
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+from modelestimator.modelestimator._bw_estimator.bw_estimator import bw_estimator
 
 def _resample_columns(sequence_list):
     return_list = [""] * len(sequence_list)
@@ -22,16 +26,17 @@ def _calculate_bw_for_resamplings(FORMAT, RESAMPLINGS, THRESHOLD, MULTIALIGNMENT
     eq_list = []
     number_of_times_bw_estimator_failed = 0
 
-    for _ in range(RESAMPLINGS):
-        MULTIALIGNMENT = copy.deepcopy(MULTIALIGNMENT)
-        MULTIALIGNMENT = _resample_columns(MULTIALIGNMENT)
-        MULTIALIGNMENT_LIST = [MULTIALIGNMENT]
+    for counter in range(RESAMPLINGS):
+        TMP_MULTIALIGNMENT = copy.deepcopy(MULTIALIGNMENT)
+        TMP_MULTIALIGNMENT = _resample_columns(TMP_MULTIALIGNMENT)
+        MULTIALIGNMENT_LIST = [TMP_MULTIALIGNMENT]
 
         try:
             Q, EQ = bw_estimator(FORMAT, THRESHOLD, MULTIALIGNMENT_LIST)
             q_list.append(Q)
             eq_list.append(EQ)
         except:
+            print(counter)
             number_of_times_bw_estimator_failed +=1
 
     FAILED_PERCENTAGE = number_of_times_bw_estimator_failed / RESAMPLINGS
