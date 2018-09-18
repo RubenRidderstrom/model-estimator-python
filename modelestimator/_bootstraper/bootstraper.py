@@ -5,38 +5,34 @@ import math
 import sys
 import os
 
-sys.path.insert(1, os.path.join(os.path.dirname(__file__), ".."))
-from modelestimator._bw_estimator.bw_estimator import bw_estimator
+sys.path.insert(1, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from _bw_estimator.bw_estimator import bw_estimator
 
-def _resample_columns(sequence_list):
-    return_list = [""] * len(sequence_list)
-    SEQUENCE_LENGTH = len(sequence_list[0])
+#   Private functions
+def _resample_columns(MULTIALIGNMENT_ARRAY):
+    new_multialignment = np.empty_like(MULTIALIGNMENT_ARRAY)
+    SEQUENCE_LENGTH = MULTIALIGNMENT_ARRAY.shape[1]
 
-    for _ in range(SEQUENCE_LENGTH):
+    for COLUMN_INDEX in range(SEQUENCE_LENGTH):
         RANDOM_INDEX = random.randint(0, SEQUENCE_LENGTH - 1)
+        new_multialignment[:, COLUMN_INDEX] = MULTIALIGNMENT_ARRAY[:, RANDOM_INDEX]
 
-        for SEQUENCE_INDEX, SEQUENCE in enumerate(sequence_list):
-            SEQUENCE_ELEMENT = SEQUENCE[RANDOM_INDEX]
-            return_list[SEQUENCE_INDEX] = return_list[SEQUENCE_INDEX] + SEQUENCE_ELEMENT
-
-    return return_list
+    return new_multialignment
 
 def _calculate_bw_for_resamplings(RESAMPLINGS, THRESHOLD, MULTIALIGNMENT):
     q_list = []
     eq_list = []
     number_of_times_bw_estimator_failed = 0
 
-    for counter in range(RESAMPLINGS):
-        TMP_MULTIALIGNMENT = copy.deepcopy(MULTIALIGNMENT)
-        TMP_MULTIALIGNMENT = _resample_columns(TMP_MULTIALIGNMENT)
-        MULTIALIGNMENT_LIST = [TMP_MULTIALIGNMENT]
+    for _ in range(RESAMPLINGS):
+        RESAMPLED_MULTIALIGNMENT = _resample_columns(MULTIALIGNMENT)        
+        RESAMPLED_MULTIALIGNMENT_LIST = [RESAMPLED_MULTIALIGNMENT]
 
         try:
-            Q, EQ = bw_estimator(THRESHOLD, MULTIALIGNMENT_LIST)
+            Q, EQ = bw_estimator(THRESHOLD, RESAMPLED_MULTIALIGNMENT_LIST)
             q_list.append(Q)
             eq_list.append(EQ)
         except:
-            print(counter)
             number_of_times_bw_estimator_failed +=1
 
     FAILED_PERCENTAGE = number_of_times_bw_estimator_failed / RESAMPLINGS

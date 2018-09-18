@@ -5,14 +5,11 @@ from Bio import AlignIO
 
 sys.path.insert(1, os.path.abspath(os.path.join(sys.path[0], "..")))
 from modelestimator._bootstraper.bootstraper import bootstraper
+from modelestimator._handle_input.handle_input_file import handle_input_file
 
 def test_bootstrap_1():
     REFERENCE_FILE_PATH = os.path.abspath(os.path.join(sys.path[0], "tests\\test_bootstrap_1\\1000LongMultialignment.phylip"))
-    MULTIALIGNMENT = AlignIO.read(REFERENCE_FILE_PATH, "phylip")
-    MULTIALIGNMENT = [sequence.seq._data for sequence in MULTIALIGNMENT]
-    
-    for index, sequence in enumerate(MULTIALIGNMENT):
-        MULTIALIGNMENT[index] = np.array(list(sequence))
+    MULTIALIGNMENT = handle_input_file(REFERENCE_FILE_PATH, "phylip")
 
     RESAMPLINGS = 25
     THRESHOLD = 0.001
