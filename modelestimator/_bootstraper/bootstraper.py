@@ -53,7 +53,10 @@ def q_diff_mean(REFERENCE_Q, RESAMPLED_Q_LIST):
 #   Interface
 def bootstraper(RESAMPLINGS, THRESHOLD, MULTIALIGNMENT):
     MULTIALIGNMENT_LIST = [MULTIALIGNMENT]
-    REFERENCE_Q,_ = bw_estimator(THRESHOLD, MULTIALIGNMENT_LIST)
+    try:
+        REFERENCE_Q,_ = bw_estimator(THRESHOLD, MULTIALIGNMENT_LIST)
+    except:
+        raise ValueError("Failed to estimate a baseline Q matrix")
 
     RESAMPLED_Q_LIST, FAILED_PERCENTAGE = _calculate_bw_for_resamplings(RESAMPLINGS, THRESHOLD, MULTIALIGNMENT)
     Q_DIFF_MEAN = q_diff_mean(REFERENCE_Q, RESAMPLED_Q_LIST)
