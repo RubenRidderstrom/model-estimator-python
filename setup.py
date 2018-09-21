@@ -1,14 +1,11 @@
 import setuptools
 
-with open('requirements.txt') as f:
-    requirements = f.read().splitlines()
-
 with open("README.txt", "r") as fh:
     long_description = fh.read()
 	
 setuptools.setup(
-	name='modelestimator_v2',
-	version='0.0.3',
+	name='modelestimator-v2',
+	version='0.0.4',
 	author='Ruben Ridderström',
 	author_email='ruben.ridderstrom@gmail.com',
 	description='Program for estimating amino acid replacement rates',
@@ -22,7 +19,11 @@ setuptools.setup(
 			'modelestimator = modelestimator.main:main'
 		]
 	},
-	install_requires=requirements,
+	install_requires=[
+	"scipy",
+	"numpy",
+	"biopython"
+	],
 	setup_requires=['pytest-runner'],
 	tests_require=['pytest']
 	)
