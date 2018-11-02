@@ -2,7 +2,7 @@ import numpy as np
 
 ### Private functions
 def _matching_letters(a,b, COMPARE_INDELS_FLAG):
-    assert(len(a) == len(b))
+    assert(len(a) == len(b))    
 
     number_of_matching_positions = 0
 
@@ -17,8 +17,6 @@ def _matching_letters(a,b, COMPARE_INDELS_FLAG):
 
 ### Interface
 def match_closest_pairs(sequence_list, COMPARE_INDELS_FLAG):
-    assert (len(sequence_list) % 2) == 0
-
     indexes_and_matching_letters = []
 
     for PRIMARY_INDEX, PRIMARY_SEQUENCE in enumerate(sequence_list):
@@ -35,7 +33,7 @@ def match_closest_pairs(sequence_list, COMPARE_INDELS_FLAG):
     closest_pairs = []
     NUMBER_OF_SEQUENCES = len(sequence_list)
 
-    while len(matched_indexes) != NUMBER_OF_SEQUENCES:
+    while (NUMBER_OF_SEQUENCES - len(matched_indexes)) >= 2:
         CURRENT_INDEX_AND_MATCHING_LETTERS_TUPLE = indexes_and_matching_letters.pop(0)
         FIRST_INDEX = CURRENT_INDEX_AND_MATCHING_LETTERS_TUPLE[0][1]
         SECOND_INDEX = CURRENT_INDEX_AND_MATCHING_LETTERS_TUPLE[0][0]
