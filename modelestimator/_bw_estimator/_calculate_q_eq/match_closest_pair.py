@@ -2,7 +2,8 @@ import numpy as np
 
 ### Private functions
 def _matching_letters(a,b, COMPARE_INDELS_FLAG):
-    assert(len(a) == len(b))    
+    if (len(a) != len(b)):
+        raise ValueError("Sequences need to be of equal length")
 
     number_of_matching_positions = 0
 
