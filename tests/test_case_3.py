@@ -9,7 +9,7 @@ from modelestimator._handle_input.handle_input_file import handle_input_file
 def test_case_2(tmpdir):
         #   Create directory paths
     CURRENT_DIR = os.path.dirname(__file__)
-    TEST_FILES_PATH = os.path.join(CURRENT_DIR, 'test_case_3\\')
+    TEST_FILES_PATH = os.path.join(CURRENT_DIR, 'test_case_3/')
 
     #   Create sequence file path
     FILE_PATH_1 = os.path.join(TEST_FILES_PATH, "JTT_balancedtree_32sequences_10000long_1.fa")

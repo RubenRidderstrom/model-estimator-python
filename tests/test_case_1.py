@@ -9,7 +9,7 @@ from modelestimator._handle_input.handle_input_file import handle_input_file
 def test_case_1(tmpdir):
     #   Create directory paths
     CURRENT_DIR = os.path.dirname(__file__)
-    TEST_FILES_PATH = os.path.join(CURRENT_DIR, 'test_case_1\\')
+    TEST_FILES_PATH = os.path.join(CURRENT_DIR, 'test_case_1/')
 
     #   Create sequence file path
     SEQUENCE_FILE_NAME = "testcase1_20seqs.fa"

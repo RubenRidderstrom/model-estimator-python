@@ -10,7 +10,7 @@ from modelestimator._handle_input.handle_input_file import handle_input_file
 def test_odd_sequences():
     #   Create directory paths
     CURRENT_DIR = os.path.dirname(__file__)
-    FOLDER_DIR = 'test_odd_sequences\\'
+    FOLDER_DIR = 'test_odd_sequences/'
     TEST_FILES_PATH = os.path.join(CURRENT_DIR, FOLDER_DIR)
 
     #   Create sequence file path
