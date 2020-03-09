@@ -2,22 +2,22 @@ from modelestimator._bw_estimator.bw_estimator import bw_estimator
 from modelestimator._handle_input.handle_input_file import handle_input_file
 from modelestimator._bootstraper.bootstraper import bootstraper
 
-def controller(FORMAT, BOOTSTRAP, RESAMPLINGS, threshold, FILE_NAME_LIST):
-    MULTIALIGNMENT_LIST = []
+def controller(file_format, bootstrap, resamplings, threshold, file_name_list):
+    multialignment_list = []
     
-    for FILE in FILE_NAME_LIST:
-        MULTIALIGNMENT = handle_input_file(FILE, FORMAT)
-        MULTIALIGNMENT_LIST.append(MULTIALIGNMENT) 
+    for file in file_name_list:
+        multialignment = handle_input_file(file, file_format)
+        multialignment_list.append(multialignment) 
         
     if threshold == None:
         threshold = 0.001
     
-    if BOOTSTRAP:
-        MULTIALIGNMENT = MULTIALIGNMENT_LIST[0]
-        BOOTSTRAP_NORM,_ = bootstraper(RESAMPLINGS, threshold, MULTIALIGNMENT)
-        OUTPUT_STRING = "Bootstrap norm = " + str(BOOTSTRAP_NORM)
+    if bootstrap:
+        multialignment = multialignment_list[0]
+        bootstrap_norm,_ = bootstraper(resamplings, threshold, multialignment)
+        output_string = "Bootstrap norm = " + str(bootstrap_norm)
     else:
-        Q, EQ = bw_estimator(threshold, MULTIALIGNMENT_LIST)
-        OUTPUT_STRING = "Q =\n" + str(Q) + "\nEQ =\n" + str(EQ)   
+        q_matrix, eq = bw_estimator(threshold, multialignment_list)
+        output_string = "Q =\n" + str(q_matrix) + "\nEQ =\n" + str(eq)   
 
-    return OUTPUT_STRING
+    return output_string

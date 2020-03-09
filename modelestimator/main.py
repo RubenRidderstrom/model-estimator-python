@@ -2,7 +2,7 @@ import sys
 from modelestimator._parse_arguments import parse_arguments
 from modelestimator._controller import controller
 
-USAGE_STRING ="""Usage: python -m modelestimator <format> <options> infiles
+usage_string ="""Usage: python -m modelestimator <format> <options> infiles
 
 <format> should be either FASTA, STOCKHOLM or PHYLIP
 Output is a rate matrix and residue distribution vector.
@@ -19,23 +19,23 @@ Example usage:
     modelestimator fasta -b 200 file.fa"""
 
 def main():
-    ARGUMENT_LIST = sys.argv[1:]
+    argument_list = sys.argv[1:]
       
-    if len(ARGUMENT_LIST) == 0:
-        print(USAGE_STRING)
+    if len(argument_list) == 0:
+        print(usage_string)
         exit()
             
     try:
-        FORMAT, BOOTSTRAP, RESAMPLINGS, THRESHOLD, FILE_NAMES = parse_arguments(ARGUMENT_LIST)
+        file_format, bootstrap, resamplings, threshold, file_names = parse_arguments(argument_list)
     except Exception as e:
         print("Wrong format on input\n")
-        print(USAGE_STRING)
+        print(usage_string)
         exit()
         
     try:
-        OUTPUT_STRING = controller(FORMAT, BOOTSTRAP, RESAMPLINGS, THRESHOLD, FILE_NAMES)
+        output_string = controller(file_format, bootstrap, resamplings, threshold, file_names)
     except Exception as e:
         print("Error: ", e)
         exit()
 
-    print(OUTPUT_STRING)
+    print(output_string)
