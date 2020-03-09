@@ -22,9 +22,9 @@ setuptools.setup(
 		]
 	},
 	install_requires=[
-	"scipy",
-	"numpy",
-	"biopython"
+	"scipy>=1.1.0",
+	"numpy>=1.14",
+	"biopython>=1.70"
 	],
 	setup_requires=['pytest-runner'],
 	tests_require=['pytest']
